@@ -1,4 +1,8 @@
-import { UniformRichText, UniformText } from "@uniformdev/canvas-react";
+import {
+  UniformRichText,
+  UniformSlot,
+  UniformText,
+} from "@uniformdev/canvas-react";
 
 const resolveParameterComponent = ({ parameterId, parameterType, mapping }) => {
   if (!mapping) {
@@ -14,13 +18,15 @@ const resolveParameterComponent = ({ parameterId, parameterType, mapping }) => {
   }
 
   console.warn(`Unsupported parameter type: ${parameterType}`);
+
   return null;
 };
 
 export const UniformWrapper = ({
+  component,
   resolvedComponent,
   parameterMappings,
-  children,
+  slotMappings,
   ...rest
 }) => {
   // iterate through parameters which have been mapped
@@ -47,13 +53,26 @@ export const UniformWrapper = ({
         parameterId: key,
         parameterType: parameterDefinition.type,
         mapping: parameterMapping,
-        component,
-        context,
       });
 
       // if the parameter component is found, add it to the accumulator
       if (parameterComponent) {
         acc[key] = parameterComponent;
+      }
+
+      return acc;
+    },
+    {}
+  );
+
+  const remappedSlots = Object.entries(slotMappings ?? {}).reduce(
+    (acc, [key, value]) => {
+      const slotMapping = value;
+
+      const slotName = slotMapping.slotName ?? key;
+
+      if (slotName) {
+        acc[key] = <UniformSlot name={slotName} />;
       }
 
       return acc;
@@ -69,7 +88,7 @@ export const UniformWrapper = ({
     component: component,
     ...rest,
     ...remappedProps,
-    children,
+    ...remappedSlots,
   };
 
   return <ResolvedComponent {...props} />;

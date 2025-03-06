@@ -3,7 +3,11 @@ import ProductGallery from "../../components/productGallery";
 import FormattedMessage from "../../components/formattedmessage";
 import Button from "../../components/button";
 import EmailComposition from "../../components/emailComposition";
-import { UniformSlot } from "@uniformdev/canvas-react";
+
+export const compositionMapping = {
+  type: "page",
+  component: EmailComposition,
+};
 
 export const hero = {
   type: "featuredProduct",
@@ -18,21 +22,14 @@ export const productGallery = {
 export const button = {
   type: "button",
   component: Button,
-  parameters: {
-    href: {},
+  slots: {
+    children: {
+      slotName: "formattedmessage",
+    },
   },
-  children: <UniformSlot name="formattedmessage" />,
 };
 
 export const formattedMessage = {
   type: "formattedmessage",
   component: FormattedMessage,
-};
-
-export const compositionMapping = {
-  type: "page",
-  component: EmailComposition,
-  parameters: {
-    title: {},
-  },
 };

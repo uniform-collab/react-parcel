@@ -1,8 +1,3 @@
-const Button = ({ href, children, component }) => (
-  <a href={href}>
-    children go here: {children}
-    {/* <UniformSlot name="formattedmessage" /> */}
-  </a>
-);
+const Button = ({ href, children }) => <a href={href?.path}>{children}</a>;
 
 export default Button;

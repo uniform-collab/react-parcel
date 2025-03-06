@@ -23,6 +23,9 @@ export function Root() {
   }, []);
 
   return (
-    <UniformComposition data={composition} resolveRenderer={resolveComponent} />
+    <UniformComposition
+      data={composition}
+      resolveRenderer={(props) => resolveComponent(props)?.component}
+    />
   );
 }

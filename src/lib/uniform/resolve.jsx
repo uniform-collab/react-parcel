@@ -11,20 +11,26 @@ export const resolveComponent = ({ type }) => {
 
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
+
     const mapping = mappings[key];
+
     if (mapping?.type === type) {
       result = mapping;
       break;
     }
   }
 
-  console.log({ result });
-
-  return (
-    <UniformWrapper
-      resolvedComponent={result.component}
-      parameterMappings={result.parameters}
-      children={result.children}
-    />
-  );
+  return {
+    ...result,
+    component: (props) => {
+      return (
+        <UniformWrapper
+          {...props}
+          resolvedComponent={result.component}
+          parameterMappings={result.parameters}
+          slotMappings={result.slots}
+        />
+      );
+    },
+  };
 };

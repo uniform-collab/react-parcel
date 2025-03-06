@@ -1,5 +1,5 @@
 const FormattedMessage = ({ id, description, defaultMessage }) => (
-  <span id={id}>aaa{description}</span>
+  <span id={id}>{description}</span>
 );
 
 export default FormattedMessage;
