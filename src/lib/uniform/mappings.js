@@ -32,4 +32,7 @@ export const button = {
 export const formattedMessage = {
   type: "formattedmessage",
   component: FormattedMessage,
+  parameters: {
+    description: {},
+  },
 };
