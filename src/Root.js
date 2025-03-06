@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  DefaultNotImplementedComponent,
-  UniformComposition,
-} from "@uniformdev/canvas-react";
-import FeaturedProduct from "./components/featuredProduct";
-import EmailComposition from "./components/emailComposition";
-import ProductGallery from "./components/productGallery";
+import { UniformComposition } from "@uniformdev/canvas-react";
+import { resolveComponent } from "./lib/uniform/resolve";
 
 export function Root() {
   let [composition, setComposition] = useState(null);
@@ -28,19 +23,6 @@ export function Root() {
   }, []);
 
   return (
-    <UniformComposition data={composition} resolveRenderer={resolveRenderer} />
+    <UniformComposition data={composition} resolveRenderer={resolveComponent} />
   );
 }
-
-const mapping = {};
-mapping["featuredProduct"] = FeaturedProduct;
-mapping["page"] = EmailComposition;
-mapping["productGallery"] = ProductGallery;
-
-export const resolveRenderer = (component) => {
-  if (component?.type) {
-    const implementation = mapping[component.type];
-    if (implementation) return implementation;
-  }
-  return DefaultNotImplementedComponent;
-};
