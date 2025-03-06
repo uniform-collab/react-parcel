@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import {
-  DefaultNotImplementedComponent,
-  UniformComposition,
-} from "@uniformdev/canvas-react";
-import FeaturedProduct from "./components/featuredProduct";
-import EmailComposition from "./components/emailComposition";
-import ProductGallery from "./components/productGallery";
+import { UniformComposition } from "@uniformdev/canvas-react";
+import { EMPTY_COMPOSITION } from "@uniformdev/canvas";
+import { resolveComponent } from "./lib/uniform/resolve";
 
 export function Root() {
   let [composition, setComposition] = useState(null);
-  const compositionPath = "/campaign-emails/product-launch-q2-25";
   const projectId = "1d90b3f7-0fe8-4157-88dd-6d9cbe737c46";
+
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    let path = params.get("path"); // composition path
     fetch(
-      `https://uniform.app/api/v1/route?path=${compositionPath}&projectId=${projectId}`,
+      `https://uniform.app/api/v1/route?path=${path}&projectId=${projectId}`,
       {
         headers: {
           "x-api-key":
@@ -28,19 +26,9 @@ export function Root() {
   }, []);
 
   return (
-    <UniformComposition data={composition} resolveRenderer={resolveRenderer} />
+    <UniformComposition
+      data={composition ?? EMPTY_COMPOSITION}
+      resolveRenderer={(props) => resolveComponent(props)?.component}
+    />
   );
 }
-
-const mapping = {};
-mapping["featuredProduct"] = FeaturedProduct;
-mapping["page"] = EmailComposition;
-mapping["productGallery"] = ProductGallery;
-
-export const resolveRenderer = (component) => {
-  if (component?.type) {
-    const implementation = mapping[component.type];
-    if (implementation) return implementation;
-  }
-  return DefaultNotImplementedComponent;
-};
